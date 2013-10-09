@@ -3,5 +3,6 @@ build/
 
 .settings/
 .gradle/
+.nb-gradle/
 
 
