@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':di-base')
+	compile 'com.google.inject:guice:3.0'
+}
