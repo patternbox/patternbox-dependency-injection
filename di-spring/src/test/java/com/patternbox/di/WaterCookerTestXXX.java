@@ -1,4 +1,4 @@
-package com.patternbox;
+package com.patternbox.di;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
