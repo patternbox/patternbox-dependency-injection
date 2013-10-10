@@ -16,11 +16,11 @@
       <artifactId>dependency-injection-base</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>3.0</version>
-    </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>3.1.2.RELEASE</version>
+		</dependency>
   </dependencies>
 
 </project>
