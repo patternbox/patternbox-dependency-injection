@@ -1,35 +1,45 @@
 package com.patternbox.di.spring;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.patternbox.di.cooking.WaterCooker;
 
 /**
- * Unit test for simple App.
+ * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox<a>
  */
-public class WaterCookerTest extends TestCase {
+public class WaterCookerTest {
+
+	private WaterCooker waterCooker;
 
 	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *          name of the test case
+	 * @throws java.lang.Exception
 	 */
-	public WaterCookerTest(String testName) {
-		super(testName);
+	@Before
+	public void setUp() throws Exception {
+		waterCooker = new WaterCooker();
 	}
 
 	/**
-	 * @return the suite of tests being tested
+	 * Test method for {@link com.patternbox.di.cooking.WaterCooker#start()}.
 	 */
-	public static Test suite() {
-		return new TestSuite(WaterCookerTest.class);
+	@Test(expected = NullPointerException.class)
+	public void testMissingDependencyInjection() {
+		waterCooker.start();
 	}
 
 	/**
-	 * Rigourous Test :-)
+	 * Test method for {@link com.patternbox.di.cooking.WaterCooker#start()}.
 	 */
-	public void testApp() {
-		assertTrue(true);
+	@Test
+	public void testSpringDependencyInjection() throws Exception {
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
+		waterCooker = (WaterCooker) context.getBean("waterCooker");
+		Assert.assertFalse(waterCooker.isHot());
+		waterCooker.start();
+		Assert.assertTrue(waterCooker.isHot());
 	}
 }
