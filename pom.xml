@@ -7,12 +7,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <modules>
-    <module>di-base</module>
-    <module>di-guice</module>
-    <module>di-spring</module>
-    <module>di-jee</module>
-  </modules>
+  <modules></modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
