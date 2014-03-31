@@ -23,53 +23,51 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.spring;
+package com.patternbox.di.library;
 
-import static org.junit.Assert.assertNotNull;
+import static com.patternbox.di.library.CsvFileReader.AUTHORS_CSV;
 
-import java.math.BigDecimal;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.patternbox.di.payment.OnlineShop;
+import com.patternbox.di.library.data.Author;
 
 /**
+ * Import data from CSV files into database.
+ * 
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-config.xml" })
-public class OnlineShopTest {
+@Named
+public class DataImporter {
 
-	// @Autowired
+	private final String DELIMITER = ";";
+
 	@Inject
-	private OnlineShop onlineShop;
+	private CsvFileReader csvFileReader;
+
+	@PersistenceContext
+	private EntityManager em;
 
 	/**
-	 * @throws java.lang.Exception
+	 * Import authors from CSV file.<br>
+	 * format: email;first_name;last_name
 	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * Test Spring configuration
-	 */
-	@Test
-	public void applicationConfiguration() {
-		assertNotNull(onlineShop);
-	}
-
-	/**
-	 * Test method for {@link com.patternbox.di.payment.OnlineShop#pay(java.math.BigDecimal)}.
-	 */
-	@Test
-	public void testPay() {
-		onlineShop.pay(new BigDecimal(123.45));
+	public List<Author> importAuthors() throws IOException {
+		String[] fields;
+		Author author;
+		List<Author> authors = new ArrayList<Author>();
+		for (String dataLine : csvFileReader.dataLines(AUTHORS_CSV)) {
+			fields = dataLine.split(DELIMITER);
+			author = new Author(fields[0], fields[1], fields[2]);
+			em.persist(author);
+			authors.add(author);
+		}
+		return authors;
 	}
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+    <persistence-unit name="library" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        
+        <class>com.patternbox.di.library.data.Author</class>
+        <class>com.patternbox.di.library.data.Literature</class>
+        <class>com.patternbox.di.library.data.Book</class>
+        <class>com.patternbox.di.library.data.Journal</class>
+
+        <properties>
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+        </properties>
+    </persistence-unit>
+</persistence>

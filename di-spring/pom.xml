@@ -11,7 +11,7 @@
   <artifactId>dependency-injection-spring</artifactId>
   
   <properties>
-    <spring.version>3.1.2.RELEASE</spring.version>
+    <spring.version>3.2.0.RELEASE</spring.version>
   </properties>
 
   <dependencies>
@@ -20,16 +20,22 @@
       <artifactId>dependency-injection-base</artifactId>
       <version>${project.version}</version>
     </dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>${spring.version}</version>
       <scope>test</scope>
+    </dependency>
+    <!-- com.mchange.v2.c3p0.ComboPooledDataSource -->
+    <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.1.2</version>
     </dependency>
   </dependencies>
 

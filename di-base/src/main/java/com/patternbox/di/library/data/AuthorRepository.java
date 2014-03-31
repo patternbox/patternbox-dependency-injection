@@ -23,53 +23,40 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.spring;
+package com.patternbox.di.library.data;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
 
-import java.math.BigDecimal;
-
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.patternbox.di.payment.OnlineShop;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
+ * Author repository implementation
+ * 
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-config.xml" })
-public class OnlineShopTest {
+@Named
+public class AuthorRepository {
 
-	// @Autowired
-	@Inject
-	private OnlineShop onlineShop;
+	@PersistenceContext
+	private EntityManager em;
 
 	/**
-	 * @throws java.lang.Exception
+	 * Returns all authors
 	 */
-	@Before
-	public void setUp() throws Exception {
+	public List<Author> all() {
+		return em.createNamedQuery("Author.findAll", Author.class).getResultList();
 	}
 
 	/**
-	 * Test Spring configuration
+	 * Find author by e-mail (its primary key).
+	 * 
+	 * @param email
+	 *          the e-mail address
+	 * @return the author
 	 */
-	@Test
-	public void applicationConfiguration() {
-		assertNotNull(onlineShop);
-	}
-
-	/**
-	 * Test method for {@link com.patternbox.di.payment.OnlineShop#pay(java.math.BigDecimal)}.
-	 */
-	@Test
-	public void testPay() {
-		onlineShop.pay(new BigDecimal(123.45));
+	public Author findByEmail(String email) {
+		return em.find(Author.class, email);
 	}
 }

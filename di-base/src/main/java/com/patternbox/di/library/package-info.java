@@ -23,53 +23,9 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.spring;
-
-import static org.junit.Assert.assertNotNull;
-
-import java.math.BigDecimal;
-
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.patternbox.di.payment.OnlineShop;
-
 /**
+ * Library application root package.
+ * 
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-config.xml" })
-public class OnlineShopTest {
-
-	// @Autowired
-	@Inject
-	private OnlineShop onlineShop;
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * Test Spring configuration
-	 */
-	@Test
-	public void applicationConfiguration() {
-		assertNotNull(onlineShop);
-	}
-
-	/**
-	 * Test method for {@link com.patternbox.di.payment.OnlineShop#pay(java.math.BigDecimal)}.
-	 */
-	@Test
-	public void testPay() {
-		onlineShop.pay(new BigDecimal(123.45));
-	}
-}
+package com.patternbox.di.library;

@@ -23,53 +23,47 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.spring;
+package com.patternbox.di.library;
 
-import static org.junit.Assert.assertNotNull;
+import java.io.IOException;
+import java.util.List;
 
-import java.math.BigDecimal;
-
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.patternbox.di.payment.OnlineShop;
+import com.patternbox.di.library.data.Author;
+import com.patternbox.di.library.data.AuthorRepository;
+import com.patternbox.di.library.data.Literature;
 
 /**
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-config.xml" })
-public class OnlineShopTest {
+@Named
+public class Library {
 
-	// @Autowired
 	@Inject
-	private OnlineShop onlineShop;
+	private DataImporter dataImporter;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
+	@Inject
+	private AuthorRepository authorRepo;
+
+	@PostConstruct
+	private void setup() throws IOException {
+		dataImporter.importAuthors();
+	}
+
+	public void printAuthors() {
+		System.out.println("+++ AUTHORS +++");
+		for (Author author : authorRepo.all()) {
+			System.out.println(author);
+		}
 	}
 
 	/**
-	 * Test Spring configuration
+	 * Get all registered literature.
 	 */
-	@Test
-	public void applicationConfiguration() {
-		assertNotNull(onlineShop);
-	}
-
-	/**
-	 * Test method for {@link com.patternbox.di.payment.OnlineShop#pay(java.math.BigDecimal)}.
-	 */
-	@Test
-	public void testPay() {
-		onlineShop.pay(new BigDecimal(123.45));
+	public List<Literature> getRegister() {
+		return null;
 	}
 }

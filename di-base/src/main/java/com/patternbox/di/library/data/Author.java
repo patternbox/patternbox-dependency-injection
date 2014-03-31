@@ -23,53 +23,60 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.spring;
+package com.patternbox.di.library.data;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.Set;
+import java.util.TreeSet;
 
-import java.math.BigDecimal;
-
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.patternbox.di.payment.OnlineShop;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-config.xml" })
-public class OnlineShopTest {
+@Entity
+@NamedQueries({
+		@NamedQuery(name = "Author.findAll", query = "SELECT a FROM Author a ORDER BY a.lastName, a.firstName"),
+		@NamedQuery(name = "Author.findByName", query = "SELECT a FROM Author a WHERE a.lastName = :lastName") })
+public class Author {
 
-	// @Autowired
-	@Inject
-	private OnlineShop onlineShop;
+	@Id
+	private String email;
+
+	private String firstName;
+
+	private String lastName;
+
+	@ManyToMany
+	@JoinTable(name = "Author_X_Literature")
+	private final Set<Literature> literatures = new TreeSet<Literature>();
 
 	/**
-	 * @throws java.lang.Exception
+	 * Default constructor to satisfy JPA
 	 */
-	@Before
-	public void setUp() throws Exception {
+	public Author() {
+		super();
 	}
 
 	/**
-	 * Test Spring configuration
+	 * Parameterized constructor
 	 */
-	@Test
-	public void applicationConfiguration() {
-		assertNotNull(onlineShop);
+	public Author(String email, String firstName, String lastName) {
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	/**
-	 * Test method for {@link com.patternbox.di.payment.OnlineShop#pay(java.math.BigDecimal)}.
+	 * @see java.lang.Object#toString()
 	 */
-	@Test
-	public void testPay() {
-		onlineShop.pay(new BigDecimal(123.45));
+	@Override
+	public String toString() {
+		return "Author [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", literatures=" + literatures + "]";
 	}
 }

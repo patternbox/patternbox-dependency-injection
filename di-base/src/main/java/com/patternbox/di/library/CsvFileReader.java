@@ -23,53 +23,44 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.spring;
+package com.patternbox.di.library;
 
-import static org.junit.Assert.assertNotNull;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.math.BigDecimal;
-
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.patternbox.di.payment.OnlineShop;
+import javax.inject.Named;
 
 /**
+ * Utility class to read CSV file content.
+ * 
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-config.xml" })
-public class OnlineShopTest {
+@Named
+public class CsvFileReader {
 
-	// @Autowired
-	@Inject
-	private OnlineShop onlineShop;
+	static final String AUTHORS_CSV = "/authors.csv";
 
 	/**
-	 * @throws java.lang.Exception
+	 * Return data lines of a given CSV file.
+	 * 
+	 * @throws IOException
 	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * Test Spring configuration
-	 */
-	@Test
-	public void applicationConfiguration() {
-		assertNotNull(onlineShop);
-	}
-
-	/**
-	 * Test method for {@link com.patternbox.di.payment.OnlineShop#pay(java.math.BigDecimal)}.
-	 */
-	@Test
-	public void testPay() {
-		onlineShop.pay(new BigDecimal(123.45));
+	public List<String> dataLines(String csvFileName) throws IOException {
+		String line;
+		List<String> dataLines = new ArrayList<String>();
+		boolean isDataHeader = true;
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
+				.getResourceAsStream(csvFileName)))) {
+			while ((line = br.readLine()) != null) {
+				if (isDataHeader) {
+					isDataHeader = false;
+				} else
+					dataLines.add(line);
+			}
+		}
+		return dataLines;
 	}
 }

@@ -23,53 +23,43 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.spring;
+package com.patternbox.di.library;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import java.math.BigDecimal;
-
-import javax.inject.Inject;
+import java.io.IOException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.patternbox.di.payment.OnlineShop;
 
 /**
+ * Unit test for class {@link CsvFileReader}.
+ * 
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-config.xml" })
-public class OnlineShopTest {
+public class CsvFileReaderTest {
 
-	// @Autowired
-	@Inject
-	private OnlineShop onlineShop;
+	CsvFileReader csvFileReader;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		csvFileReader = new CsvFileReader();
 	}
 
 	/**
-	 * Test Spring configuration
+	 * Test method for {@link CsvFileReader#dataLines(java.lang.String)}.
 	 */
 	@Test
-	public void applicationConfiguration() {
-		assertNotNull(onlineShop);
-	}
-
-	/**
-	 * Test method for {@link com.patternbox.di.payment.OnlineShop#pay(java.math.BigDecimal)}.
-	 */
-	@Test
-	public void testPay() {
-		onlineShop.pay(new BigDecimal(123.45));
+	public void testDataLines() throws IOException {
+		List<String> dataLines = csvFileReader.dataLines(CsvFileReader.AUTHORS_CSV);
+		assertNotNull(dataLines);
+		assertFalse(dataLines.isEmpty());
+		assertEquals(3, dataLines.size());
 	}
 }
