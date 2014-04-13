@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
-    <persistence-unit name="library" transaction-type="RESOURCE_LOCAL">
+    <!--persistence-unit name="library" transaction-type="RESOURCE_LOCAL"-->
+    <persistence-unit name="library">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
         
         <class>com.patternbox.di.library.data.Author</class>
+        <class>com.patternbox.di.library.data.Publisher</class>
         <class>com.patternbox.di.library.data.Literature</class>
         <class>com.patternbox.di.library.data.Book</class>
         <class>com.patternbox.di.library.data.Journal</class>
 
-        <properties>
+        <!--properties>
             <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
-        </properties>
+        </properties-->
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:example" />
+      <property name="javax.persistence.jdbc.user" value="sa" />
+      <property name="javax.persistence.jdbc.password" value="" />
+
+      <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+
+      <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+      <property name="hibernate.show_sql" value="true" />
+      <property name="hibernate.format_sql" value="false" />
+      <property name="hibernate.transaction.flush_before_completion" value="true" />
+    </properties>
     </persistence-unit>
 </persistence>

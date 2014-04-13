@@ -25,10 +25,8 @@ SUCH DAMAGE.
  ******************************************************************************/
 package com.patternbox.di.library;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -43,15 +41,7 @@ import com.patternbox.di.library.data.Literature;
 public class Library {
 
 	@Inject
-	private DataImporter dataImporter;
-
-	@Inject
 	private AuthorRepository authorRepo;
-
-	@PostConstruct
-	private void setup() throws IOException {
-		dataImporter.importAuthors();
-	}
 
 	public void printAuthors() {
 		System.out.println("+++ AUTHORS +++");

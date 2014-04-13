@@ -23,39 +23,54 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.library.data;
+package com.patternbox.di.jee;
 
-import java.util.Set;
-import java.util.TreeSet;
+import static org.junit.Assert.assertNotNull;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.ejb.EJB;
+
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
+import org.jboss.shrinkwrap.api.Filters;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.patternbox.di.library.Library;
 
 /**
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Literature {
+@RunWith(Arquillian.class)
+public class LibraryITest {
 
-	@Id
-	private String isbn;
+	@EJB
+	private Library library;
 
-	@Basic(optional = false)
-	private String title;
+	@Deployment
+	public static JavaArchive createDeployment() {
+		// create Java archive
+		return ShrinkWrap
+				.create(JavaArchive.class, "library.jar")
+				// exclude WaterCookerTest to prevent Needle exceptions
+				.addPackages(true /* recursive */, Filters.exclude(WaterCookerTest.class),
+						"com.patternbox.di")
+				.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+				.addAsResource("authors.csv").addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+	}
 
-	@ManyToMany
-	@JoinTable(name = "Author_X_Literature", joinColumns = { @JoinColumn(name = "isbn") }, inverseJoinColumns = { @JoinColumn(name = "author") })
-	private final Set<Author> authors = new TreeSet<Author>();
+	@Before
+	public void setUp() throws Exception {
+		assertNotNull(library);
+	}
 
-	@ManyToOne
-	@JoinColumn(name = "publisherId")
-	private Publisher publisher;
+	@Test
+	@InSequence(2)
+	public void testCreateLocation2() {
+		library.printAuthors();
+	}
 }

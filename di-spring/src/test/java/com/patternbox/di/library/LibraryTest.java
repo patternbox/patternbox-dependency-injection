@@ -34,6 +34,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.patternbox.di.spring.LibraryApp;
 
 /**
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
@@ -41,10 +45,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-config.xml",
 		"classpath:/META-INF/spring/database-context.xml" })
+@TransactionConfiguration(defaultRollback = false)
+@Transactional
 public class LibraryTest {
 
 	@Inject
-	private Library library;
+	private LibraryApp library;
 
 	/**
 	 * @throws java.lang.Exception

@@ -41,7 +41,7 @@ import javax.inject.Named;
 @Named
 public class CsvFileReader {
 
-	static final String AUTHORS_CSV = "/authors.csv";
+	public static final String AUTHORS_CSV = "/authors.csv";
 
 	/**
 	 * Return data lines of a given CSV file.

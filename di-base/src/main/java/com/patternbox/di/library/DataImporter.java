@@ -25,8 +25,6 @@ SUCH DAMAGE.
  ******************************************************************************/
 package com.patternbox.di.library;
 
-import static com.patternbox.di.library.CsvFileReader.AUTHORS_CSV;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +60,7 @@ public class DataImporter {
 		String[] fields;
 		Author author;
 		List<Author> authors = new ArrayList<Author>();
-		for (String dataLine : csvFileReader.dataLines(AUTHORS_CSV)) {
+		for (String dataLine : csvFileReader.dataLines(CsvFileReader.AUTHORS_CSV)) {
 			fields = dataLine.split(DELIMITER);
 			author = new Author(fields[0], fields[1], fields[2]);
 			em.persist(author);

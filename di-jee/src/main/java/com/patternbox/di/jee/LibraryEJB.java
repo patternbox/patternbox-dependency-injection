@@ -23,39 +23,36 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
  ******************************************************************************/
-package com.patternbox.di.library.data;
+package com.patternbox.di.jee;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.io.IOException;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.annotation.PostConstruct;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import com.patternbox.di.library.DataImporter;
+import com.patternbox.di.library.Library;
 
 /**
+ * Library application using EJBs Stateless annotation to enable transaction support.
+ * 
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Literature {
+@Stateless
+@Local(Library.class)
+public class LibraryEJB extends Library {
 
-	@Id
-	private String isbn;
+	@Inject
+	private DataImporter dataImporter;
 
-	@Basic(optional = false)
-	private String title;
-
-	@ManyToMany
-	@JoinTable(name = "Author_X_Literature", joinColumns = { @JoinColumn(name = "isbn") }, inverseJoinColumns = { @JoinColumn(name = "author") })
-	private final Set<Author> authors = new TreeSet<Author>();
-
-	@ManyToOne
-	@JoinColumn(name = "publisherId")
-	private Publisher publisher;
+	@PostConstruct
+	private void init() {
+		try {
+			dataImporter.importAuthors();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

@@ -25,10 +25,13 @@ SUCH DAMAGE.
  ******************************************************************************/
 package com.patternbox.di.library;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -37,6 +40,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.patternbox.di.jee.DataImporter;
+import com.patternbox.di.library.data.Author;
+import com.patternbox.di.library.data.AuthorRepository;
 
 /**
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
@@ -44,10 +52,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-config.xml",
 		"classpath:/META-INF/spring/database-context.xml" })
+// @TransactionConfiguration(defaultRollback = false)
+@Transactional
 public class DataImporterTest {
 
 	@Inject
 	private DataImporter dataImporter;
+
+	@Inject
+	private AuthorRepository authorRepo;
 
 	/**
 	 * @throws java.lang.Exception
@@ -62,14 +75,18 @@ public class DataImporterTest {
 	@Test
 	public void applicationConfiguration() {
 		assertNotNull(dataImporter);
+		assertNotNull(authorRepo);
 	}
 
 	/**
-	 * Test method for {@link com.patternbox.di.library.DataImporter#importAuthors()}.
+	 * Test method for {@link com.patternbox.di.jee.DataImporter#importAuthors()}.
 	 */
 	@Test
 	public void testImportAuthors() throws IOException {
-		dataImporter.importAuthors();
-		fail("Not yet implemented");
+		assertTrue(authorRepo.all().isEmpty());
+		List<Author> authors1 = dataImporter.importAuthors();
+		List<Author> authors2 = authorRepo.all();
+		assertFalse(authors2.isEmpty());
+		assertEquals(authors1.size(), authors2.size());
 	}
 }

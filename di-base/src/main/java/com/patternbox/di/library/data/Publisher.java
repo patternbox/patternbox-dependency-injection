@@ -25,37 +25,19 @@ SUCH DAMAGE.
  ******************************************************************************/
 package com.patternbox.di.library.data;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 /**
  * @author <a href='http://www.patternbox.com'>D. Ehms, Patternbox</a>
  */
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Literature {
+public class Publisher {
 
 	@Id
-	private String isbn;
+	private Long publisherId;
 
 	@Basic(optional = false)
-	private String title;
-
-	@ManyToMany
-	@JoinTable(name = "Author_X_Literature", joinColumns = { @JoinColumn(name = "isbn") }, inverseJoinColumns = { @JoinColumn(name = "author") })
-	private final Set<Author> authors = new TreeSet<Author>();
-
-	@ManyToOne
-	@JoinColumn(name = "publisherId")
-	private Publisher publisher;
+	private String name;
 }

@@ -30,6 +30,7 @@ import java.util.TreeSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -52,7 +53,7 @@ public class Author {
 	private String lastName;
 
 	@ManyToMany
-	@JoinTable(name = "Author_X_Literature")
+	@JoinTable(name = "Author_X_Literature", joinColumns = { @JoinColumn(name = "author") }, inverseJoinColumns = { @JoinColumn(name = "isbn") })
 	private final Set<Literature> literatures = new TreeSet<Literature>();
 
 	/**
