@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.patternbox.di.jee.DataImporter;
+import com.patternbox.di.library.DataImporter;
 import com.patternbox.di.library.Library;
 
 /**
